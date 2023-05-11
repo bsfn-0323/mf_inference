@@ -45,10 +45,10 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
                 map[i][2] = n+L*((L+m-1)%L);
                 map[i][3] = n+L*((L+m+1)%L);
                 map[i][4] = -1;*/
-                gsl_matrix_set(Jmat,i,(N+i+L)%N,J);
-                gsl_matrix_set(Jmat,i,(N+i-1)%N,J);
-                gsl_matrix_set(Jmat,i,(N+i+1)%N,J);
-                gsl_matrix_set(Jmat,i,(N+i-L)%N,J);
+                gsl_matrix_set(Jmat,i,(N+i+L)%N,J/T);
+                gsl_matrix_set(Jmat,i,(N+i-1)%N,J/T);
+                gsl_matrix_set(Jmat,i,(N+i+1)%N,J/T);
+                gsl_matrix_set(Jmat,i,(N+i-L)%N,J/T);
             }
             //assign random value of spin
             r = drand();
@@ -74,8 +74,8 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
                         gsl_matrix_int_set(map,j,countj[j],i);
                         /*map[i][countj[i]+count] = j;
                         map[j][countj[j]] = i;*/
-                        gsl_matrix_set(Jmat,i,j,J);
-                        gsl_matrix_set(Jmat,j,i,J);
+                        gsl_matrix_set(Jmat,i,j,J/T);
+                        gsl_matrix_set(Jmat,j,i,J/T);
                         
                         count++;
                         countj[j]++;
