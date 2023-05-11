@@ -1,6 +1,6 @@
 #!/bin/bash
 mkdir outputs
-gcc -g -o blmcp bc_graph.c -lm -lgslcblas -lgsl
+gcc -g -o blmcp blumecapel.c -lm -lgslcblas -lgsl
 gcc -g -o bcinf bc_inf.c -lm -lgslcblas -lgsl
 for ((c = 0;c<=40;c=c+1)); 
 do
