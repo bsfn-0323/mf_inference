@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "memory": "cpp",
+        "random": "cpp",
+        "cmath": "cpp",
+        "iosfwd": "cpp"
+    }
+}
