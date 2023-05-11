@@ -49,7 +49,7 @@ double get_gamma(int N, gsl_matrix *J, gsl_matrix *J0){
             den += JJ0*JJ0;
         }
     }
-    printf("num = %f\nden = %f\n\n",num,den);
+    //printf("num = %f\nden = %f\n\n",num,den);
     return sqrt(num/den);
 }
 
@@ -134,10 +134,10 @@ int main(int argc, char **argv){
 
         //Get the correlation matrix    
         get_corr_mat(MCS,N,conf,corr);
-        printf("Computed Correlation Matrix\n\n");
+        //printf("Computed Correlation Matrix\n\n");
         //In the MF approximation the interactions are given by the inverse of the correlation matrix
         J = inv_mat(N,corr);
-        printf("Computed Interaction Matrix\n\n");
+        //printf("Computed Interaction Matrix\n\n");
         for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
 
         //Save the interaction matrix in a binary file
