@@ -289,20 +289,23 @@ class IsingER {
 
 int main(int argc, char *argv[]){
 
-    //#define LATTICE_2D
-    #define RANDOM_GRAPH
-    if(argc != 3){
-        cout << "usage: " << argv[0] << " <T> <is_dis>"<< endl;
-        return 129;
-    }
+    //Possiamo scegliere tra Lattice e random graph attivando il corrispondente define
+
+    #define LATTICE_2D
+    //#define RANDOM_GRAPH
 
     #ifdef LATTICE_2D
 
-    const int NUM_SWEEPS = 200000;
-    const double T = atof(argv[1]);  
-    const int L = 10; //Lato del reticolo
-    const bool is_dis = atoi(argv[2]); //true se è uno spin glass
-    int N = L * L;
+    if(argc != 4){
+        cout << "usage: " << argv[0] << " <T> <L> <is_dis>"<< endl;
+        return 1;
+    }
+
+    const int NUM_SWEEPS = 200000; //Numero di sweep montecarlo
+    const double T = atof(argv[1]); //Temperatura 
+    const int L = atoi(argv[2]); //Lato del reticolo
+    const bool is_dis = atoi(argv[3]); //true se è uno spin glass
+    int N = L * L; //Numero di spin
     
     Ising2D ising(L, T, is_dis);
     vector<vector<double>> couplings = ising.get_couplings();
@@ -335,11 +338,17 @@ int main(int argc, char *argv[]){
     #endif
 
     #ifdef RANDOM_GRAPH
-    const int NUM_SWEEPS = 200000;
-    const double T = atof(argv[1]);
-    const int N = 100; //Numero di spin
+
+    if(argc != 4){
+        cout << "usage: " << argv[0] << " <T> <N> <is_dis>"<< endl;
+        return 1;
+    }
+
+    const int NUM_SWEEPS = 200000; //Numero di sweep montacarlo
+    const double T = atof(argv[1]); //Temperatura
+    const int N = atoi(argv[2]); //Numero di spin
+    const bool is_dis = atoi(argv[3]); //true se è uno spin glass
     const double p = 0.04; //Probabilità di formazione di un legame
-    const bool is_dis = atoi(argv[2]); //true se è uno spin glass
 
     IsingER ising(N, p, T, is_dis);
     vector<vector<double>> couplings = ising.get_couplings();
