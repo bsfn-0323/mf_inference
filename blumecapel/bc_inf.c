@@ -116,7 +116,7 @@ int main(int argc, char **argv){
         fclose(fp);
 
         //Calcola la matrice di correlazione
-        get_corr_mat(MCS,N,conf,corr,Tmin+dT*count);
+        get_corr_mat(MCS,N,conf,corr);
         //printf("Computed Correlation Matrix\n\n");
         
         //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
