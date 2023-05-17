@@ -121,7 +121,7 @@ int main(int argc, char **argv){
         
         //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
         J = inv_mat(N,corr);
-        printf("Computed Interaction Matrix\n\n");
+        //printf("Computed Interaction Matrix\n\n");
         for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
 
         //Salva in binario la matrice di interazione
@@ -132,7 +132,7 @@ int main(int argc, char **argv){
         
         //Compute the reconstruction error
         gamma=get_gamma(N,J,J0);
-        printf("Computed Gamma\n\n");
+        //printf("Computed Gamma\n\n");
         fp=fopen(fnameGamma,"a");
         fprintf(fp,"%f\t%f\n",gamma,Tmin+dT*count);
         fclose(fp);
