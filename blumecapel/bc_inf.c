@@ -97,7 +97,7 @@ int main(int argc, char **argv){
     J = gsl_matrix_alloc(N,N);
     J0 = gsl_matrix_alloc(N,N);
 
-    sprintf(fnameGamma,"outputs/bcGamma.txt",L,Tmin,Tmax);
+    sprintf(fnameGamma,"outputs/bcGamma.txt");
     
     clock_t begin = clock();
     //printf("Reading from %d\n",skip);
