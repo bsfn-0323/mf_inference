@@ -37,13 +37,13 @@ void get_corr_mat(int MCS,int N, gsl_matrix_int *config,gsl_matrix *corr){
     gsl_vector_int_free(b);
 }
 
-double get_gamma(int N, gsl_matrix *J, gsl_matrix *J0){
+double get_gamma(int N, gsl_matrix *J, gsl_matrix *J0,double T){
     double num = 0.;
     double den = 0.;
     double JJ,JJ0;
     for(int i = 0;i<N;i++){
         for(int j = i+1;j<N;j++){
-            JJ = -gsl_matrix_get(J,i,j);
+            JJ = -gsl_matrix_get(J,i,j)/T;
             JJ0 = gsl_matrix_get(J0,i,j);
             num += (JJ-JJ0)*(JJ-JJ0);
             den += JJ0*JJ0;
@@ -116,7 +116,7 @@ int main(int argc, char **argv){
         fclose(fp);
 
         //Calcola la matrice di correlazione
-        get_corr_mat(MCS,N,conf,corr);
+        get_corr_mat(MCS,N,conf,corr,Tmin+dT*count);
         //printf("Computed Correlation Matrix\n\n");
         
         //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
@@ -131,10 +131,10 @@ int main(int argc, char **argv){
         fclose(fp);
         
         //Compute the reconstruction error
-        gamma=get_gamma(N,J,J0);
+        gamma=get_gamma(N,J,J0,Tmin+dT*count);
         //printf("Computed Gamma\n\n");
         fp=fopen(fnameGamma,"a");
-        fprintf(fp,"%f\t%f\n",gamma,Tmin+dT*count);
+        fprintf(fp,"%f\t%f\n",Tmin+dT*count,gamma);
         fclose(fp);
         
         printf("----------------%d---------------\n",count);
