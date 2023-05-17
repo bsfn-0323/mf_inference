@@ -5,13 +5,13 @@ gcc -g -o blmcp blumecapel.c -lm -lgslcblas -lgsl
 gcc -g -o bcinf bc_inf.c -lm -lgslcblas -lgsl
 
 declare -i nMeas=40
-mu=$(bc<<<"0.25")
+mu=0.25
 declare -i L=8
-J=$(bc<<<"1.0")
-Tmin=$(bc<<<"0.75")
-dT=$(bc<<<"0.05")
+J=1.0
+Tmin=0.75
+dT=0.05
 Tmax=$(bc<<<"$Tmin+$dT*$nMeas")
-p=$(bc<<<"0.0325")
+p=0.0325
 declare -i MCS=100000
 
 echo L = $L, J = $J, mu = $mu, Tmin = $Tmin, Tmax=$Tmax, p = $p,nMeas = $nMeas, MCS = $MCS
