@@ -21,4 +21,6 @@ do
     ./blmcp $L $J $mu $T $p $MCS $c;
     echo -------------------$c----------------------
 done;
+
+echo Inizio Inferenza 
 ./bcinf $L $MCS $Tmin $Tmax $dT $nMeas 
