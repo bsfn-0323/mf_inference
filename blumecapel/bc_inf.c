@@ -5,7 +5,7 @@
 #include <gsl/gsl_linalg.h>
 #include <time.h>
 
-//correlazione 2 pti
+//correlazione 
 double corr2p(int MCS,gsl_vector_int *a,gsl_vector_int *b){
     int mean1 = 0,mean2 = 0;
     int corr = 0;
@@ -49,7 +49,7 @@ double get_gamma(int N, gsl_matrix *J, gsl_matrix *J0){
             den += JJ0*JJ0;
         }
     }
-    printf("num = %f\nden = %f\n\n",num,den);
+    //printf("num = %f\nden = %f\n\n",num,den);
     return sqrt(num/den);
 }
 
@@ -79,8 +79,8 @@ int main(int argc, char **argv){
     gsl_matrix *J,*J0;
     char fnameConfig[50],fnameJ[50],fnameGamma[50];
 
-    if(argc!=8){
-        fprintf(stderr,"Give size of the lattice L and totalt MCSs\n");
+    if(argc!=7){
+        fprintf(stderr,"Inserire i parametri: L, MCS, Tmin, Tmax, dT, meas \n\n");
         exit(EXIT_FAILURE);
     }
     L = atoi(argv[1]);
@@ -90,7 +90,7 @@ int main(int argc, char **argv){
     Tmax = atof(argv[4]);
     dT = atof(argv[5]);
     meas = atoi(argv[6]);
-    skip = atoi(argv[7]);
+    //skip = atoi(argv[7]);
 
     conf = gsl_matrix_int_alloc(MCS,N);
     corr = gsl_matrix_alloc(N,N);
@@ -100,30 +100,31 @@ int main(int argc, char **argv){
     sprintf(fnameGamma,"outputs/bcGamma_L%d_Tmin%.3f_Tmax%.3f.txt",L,Tmin,Tmax);
     
     clock_t begin = clock();
-    printf("Reading from %d\n",skip);
-    for(int count = skip;count<meas;count++){
-        //Read configuration
+    //printf("Reading from %d\n",skip);
+    for(int count = 0;count<meas;count++){
+        //Leggi configurazione
         sprintf(fnameConfig,"outputs/bcConfig_n%d.bin",count);
         fp = fopen(fnameConfig,"rb");
         gsl_matrix_int_fread(fp,conf);
         fclose(fp);
-        printf("Input Files\n\n");
+        //printf("Input Files\n\n");
 
-        //Read original interaction matricies
+        //Leggi la matrice di interazione originale
         sprintf(fnameJ,"outputs/bcJ0.bin");
         fp = fopen(fnameJ,"rb");
         gsl_matrix_fread(fp,J0);
         fclose(fp);
 
-        //Get the correlation matrix    
+        //Calcola la matrice di correlazione
         get_corr_mat(MCS,N,conf,corr);
-        printf("Computed Correlation Matrix\n\n");
-        //In the MF approximation the interactions are given by the inverse of the correlation matrix
+        //printf("Computed Correlation Matrix\n\n");
+        
+        //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
         J = inv_mat(N,corr);
         printf("Computed Interaction Matrix\n\n");
         for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
 
-        //Save the interaction matrix in a binary file
+        //Salva in binario la matrice di interazione
         sprintf(fnameJ,"outputs/bcJ_n%d.bin",count);
         fp=fopen(fnameJ,"wb");
         gsl_matrix_fwrite(fp,J);
@@ -135,7 +136,8 @@ int main(int argc, char **argv){
         fp=fopen(fnameGamma,"a");
         fprintf(fp,"%f\t%f\n",gamma,Tmin+dT*count);
         fclose(fp);
-
+        
+        printf("----------------%d---------------\n",count);
     }
     
     clock_t end =clock();
