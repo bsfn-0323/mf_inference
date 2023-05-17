@@ -16,8 +16,6 @@
 //Modificare NNRANGE per impostare il numero massimo di vertici
 #define NNRANGE 10
 
-//Modificare per attivare l'output in formato .txt
-//#define TXTOUT
 
 /*----------Variabili Globali----------*/
 double inv3 = 1./3.;
@@ -49,7 +47,7 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
     int n,m;
     for(int i = 0;i<N;i++){
         if(intmat==0){
-            //map near neighbours
+            //Costruisco la matrice di interazione e creo una mappa dei primi vicini
             n = i%L;
             m = floor(i/L);
 
@@ -64,7 +62,7 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
             gsl_matrix_set(Jmat,i,(N+i+1)%N,J/T);
             gsl_matrix_set(Jmat,i,(N+i-L)%N,J/T);
         }
-        //assign random value of spin
+        //distribuisco con prob 1/3 gli spin {-1,0,1}
         r = drand();
         if(r<inv3) s[i] =-1;
         if((r>=inv3)&&(r<2.*inv3)) s[i] = 0;
@@ -75,19 +73,16 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
     int count;
     int countj[N];
     for(int i = 0;i<N;i++) countj[i]=0;
-
+    
     for(int i = 0;i<N;i++){
         if(intmat == 0){
             count = 0;
             for(int j = i+1;j<N;j++){
-                //Given the i-th spin, loop over the other spins
-                //If p>r add the link between the i-th and the j-th spin
+                //Per ogni coppia ij di spin, se p>r aggiungi il collegamento
                 r = drand();
                 if(p>r){
                     gsl_matrix_int_set(map,i,countj[i]+count,j);
                     gsl_matrix_int_set(map,j,countj[j],i);
-                    /*map[i][countj[i]+count] = j;
-                    map[j][countj[j]] = i;*/
                     gsl_matrix_set(Jmat,i,j,J/T);
                     gsl_matrix_set(Jmat,j,i,J/T);
                     
@@ -97,8 +92,7 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
             }
             gsl_matrix_int_set(map,i,countj[i]+count,-1);
         }
-        //map[i][countj[i]+count]=-1;
-        //assign the i-th spin a random value
+        //distribuisco con prob 1/3 gli spin {-1,0,1}
         r = drand();
         if(r<inv3) s[i] =-1;
         if((r>=inv3)&&(r<2.*inv3)) s[i] = 0;
@@ -134,6 +128,7 @@ void init_obs(int N,double *energy, int *magn, int *rho, int *s, gsl_matrix_int 
     (*rho) = tmp_rho;
 }
 
+//Imposta le probablita' di accettazione
 void init_pacc(){
     int i,j,k;
     for(i = 0;i<3;i++){
@@ -143,6 +138,7 @@ void init_pacc(){
     }
 }
 
+//Uno step singolo con condizioni elicoidali
 void one_sweep_heli(int N,int *s,gsl_matrix_int *map, double *dE, int *dM,int *dRho){
     int idx;
     int count;
