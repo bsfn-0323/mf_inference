@@ -57,10 +57,10 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
             gsl_matrix_int_set(map,i,3,n+L*((L+m+1)%L));
             gsl_matrix_int_set(map,i,4,-1);
 
-            gsl_matrix_set(Jmat,i,(N+i+L)%N,J/T);
-            gsl_matrix_set(Jmat,i,(N+i-1)%N,J/T);
-            gsl_matrix_set(Jmat,i,(N+i+1)%N,J/T);
-            gsl_matrix_set(Jmat,i,(N+i-L)%N,J/T);
+            gsl_matrix_set(Jmat,i,(N+i+L)%N,J);
+            gsl_matrix_set(Jmat,i,(N+i-1)%N,J);
+            gsl_matrix_set(Jmat,i,(N+i+1)%N,J);
+            gsl_matrix_set(Jmat,i,(N+i-L)%N,J);
         }
         //distribuisco con prob 1/3 gli spin {-1,0,1}
         r = drand();
@@ -83,8 +83,8 @@ void init_config(int N,int *s, gsl_matrix_int *map,gsl_matrix *Jmat){
                 if(p>r){
                     gsl_matrix_int_set(map,i,countj[i]+count,j);
                     gsl_matrix_int_set(map,j,countj[j],i);
-                    gsl_matrix_set(Jmat,i,j,J/T);
-                    gsl_matrix_set(Jmat,j,i,J/T);
+                    gsl_matrix_set(Jmat,i,j,J);
+                    gsl_matrix_set(Jmat,j,i,J);
                     
                     count++;
                     countj[j]++;
