@@ -122,7 +122,7 @@ int main(int argc, char **argv){
         //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
         J = inv_mat(N,corr);
         //printf("Computed Interaction Matrix\n\n");
-        for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
+        //for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
 
         //Salva in binario la matrice di interazione
         sprintf(fnameJ,"outputs/bcJ_n%d.bin",count);
