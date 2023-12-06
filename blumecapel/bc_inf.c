@@ -13,10 +13,21 @@ double corr2p(int MCS,gsl_vector_int *a,gsl_vector_int *b){
         corr += gsl_vector_int_get(a,i)*gsl_vector_int_get(b,i);
         mean1 += gsl_vector_int_get(a,i);
         mean2 += gsl_vector_int_get(b,i);
+        
     }
     return (double)corr/MCS - (double)(mean1*mean2)/(MCS*MCS);
 }
-
+void mkrhok(int MCS,int k,gsl_matrix_int *config,double *magn, double *rho){
+    int mk = 0,rhok = 0;
+    gsl_vector_int *a = gsl_vector_int_alloc(MCS);
+    gsl_matrix_int_get_col(a,config,k);
+    for(int i = 0;i<MCS;i++){
+        mk += gsl_vector_int_get(a,i);
+        rhok += gsl_vector_int_get(a,i)*gsl_vector_int_get(a,i);
+    }
+    (*magn) = (double) mk /MCS;
+    (*rho) = (double)rhok /MCS;
+}
 void get_corr_mat(int MCS,int N, gsl_matrix_int *config,gsl_matrix *corr){
     double c;
     gsl_vector_int *a = gsl_vector_int_alloc(MCS);
@@ -122,7 +133,11 @@ int main(int argc, char **argv){
         //La matrice J inferita, nell'approccio MF, è l'inversa della matrice di correlazione
         J = inv_mat(N,corr);
         //printf("Computed Interaction Matrix\n\n");
-        //for(int i = 0;i<N;i++) gsl_matrix_set(J,i,i,0.);
+        for(int i = 0;i<N;i++){
+            double magn, rho;
+            mkrhok(MCS,i,config, &magn,&rho);
+            gsl_matrix_set(J,i,i,gsl_matrix_get(J,i,i)-1./(1.-magn*magn / (rho*rho)));
+        }
 
         //Salva in binario la matrice di interazione
         sprintf(fnameJ,"outputs/bcJ_n%d.bin",count);
